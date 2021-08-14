@@ -2,7 +2,6 @@ package com.pring.mschargecredit.controller;
 
 import com.pring.mschargecredit.entity.Credit;
 import com.pring.mschargecredit.entity.CreditCard;
-import com.pring.mschargecredit.entity.TypeCustomer;
 import com.pring.mschargecredit.service.CreditService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
@@ -47,7 +45,7 @@ public class CreditController {
         return creditCard.flatMap(cc -> creditService.findCountCreditCardId(cc.getId())
                                 .filter(count -> {
                                     // VERIFICAR CANTIDAD DE CREDITOS PERMITIDOS
-                                    switch (cc.getCustomer().getTypeCustomer()){
+                                    switch (cc.getCustomer().getTypeCustomer().getValue()){
                                         case PERSONAL: return count < 1;
                                         case EMPRESARIAL: return true;
                                         default: return false;
