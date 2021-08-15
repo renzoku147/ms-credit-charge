@@ -1,6 +1,7 @@
 package com.pring.mschargecredit.service;
 
 import com.pring.mschargecredit.entity.Credit;
+import com.pring.mschargecredit.entity.CreditCard;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -18,4 +19,6 @@ public interface CreditService {
     Mono<Long> findCountCreditCardId(String t);
 
     Mono<Double> findTotalConsumptionCreditCardId(String t);
+
+    Mono<CreditCard> findCreditCard(String id);
 }

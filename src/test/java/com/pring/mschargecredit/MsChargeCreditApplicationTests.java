@@ -1,13 +1,16 @@
 package com.pring.mschargecredit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest(classes = {MsChargeCreditApplication.class})
 class MsChargeCreditApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+		assertTrue(true);
 	}
 
 }

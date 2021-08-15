@@ -20,8 +20,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class CreditController {
 
-    WebClient webClient = WebClient.create("http://localhost:8041/creditcard");
-
     @Autowired
     CreditService creditService;
 
@@ -37,12 +35,9 @@ public class CreditController {
 
     @PostMapping("/create")
     public Mono<ResponseEntity<Credit>> create(@RequestBody Credit credit){
-        Mono<CreditCard> creditCard = webClient.get().uri("/find/{id}", credit.getCreditCard().getId())
-                                        .accept(MediaType.APPLICATION_JSON)
-                                        .retrieve()
-                                        .bodyToMono(CreditCard.class);
 
-        return creditCard.flatMap(cc -> creditService.findCountCreditCardId(cc.getId())
+        return creditService.findCreditCard(credit.getCreditCard().getId())
+                .flatMap(cc -> creditService.findCountCreditCardId(cc.getId())
                                 .filter(count -> {
                                     // VERIFICAR CANTIDAD DE CREDITOS PERMITIDOS
                                     switch (cc.getCustomer().getTypeCustomer().getValue()){
@@ -69,10 +64,7 @@ public class CreditController {
     @PutMapping("/update")
     public Mono<ResponseEntity<Credit>> update(@RequestBody Credit credit) {
         return creditService.findById(credit.getId()) //VERIFICO SI EL CREDITO EXISTE
-                .flatMap(ccDB -> webClient.get().uri("/find/{id}", ccDB.getCreditCard().getId())
-                                .accept(MediaType.APPLICATION_JSON)
-                                .retrieve()
-                                .bodyToMono(CreditCard.class)
+                .flatMap(ccDB -> creditService.findCreditCard(credit.getCreditCard().getId())
                                 .flatMap(cc -> creditService.findTotalConsumptionCreditCardId(cc.getId())
                                                 .filter(totalConsumption -> cc.getLimitCredit() >= totalConsumption - ccDB.getAmount() + credit.getAmount())
                                                 .flatMap(totalConsumption -> {
