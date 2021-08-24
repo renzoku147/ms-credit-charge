@@ -7,28 +7,24 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
-@Document("Credit")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Credit {
-    @Id
+public class CreditTransaction {
     private String id;
 
-    @NotNull
-    private CreditCard creditCard;
-
-    @NotNull
-    private Double amount;
+    private Credit credit;
     
-    @NotNull
-    private Integer numberQuota;
+    private DebitCard debitCard;
 
-    private LocalDateTime date;
+    private String transactionCode;
 
+    private Double transactionAmount;
+
+    private LocalDateTime transactionDateTime;
 }
